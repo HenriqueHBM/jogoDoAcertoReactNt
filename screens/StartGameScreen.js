@@ -1,12 +1,31 @@
 import { View, TextInput, StyleSheet } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
+import { useState } from "react";
 
 function StartGameScreen() {
+    function numberInputHandler(enteredText){
+        setEnteredNumber(enteredText);
+    }
+
+    function confirmInputHandler(){
+        
+    }
+    const [enteredNumber, setEnteredNumber] = useState('');
     return (
         <View style={styles.inputContainser}>
-            <TextInput />
-            <PrimaryButton>Reset</PrimaryButton>
-            <PrimaryButton>Confirm</PrimaryButton>
+            <TextInput style={styles.numberInput} 
+                maxLength={2} 
+                keyboardType="number-pad" 
+                autoCapitalize="none" 
+                autoCorrect={false} 
+                value={enteredNumber} 
+                onChangeText={numberInputHandler} 
+            />
+            <View style={styles.buttonsContainer}>
+                <PrimaryButton>Reset</PrimaryButton>
+                <PrimaryButton>Confirm</PrimaryButton>
+
+            </View>
         </View>
     );
 }
@@ -18,7 +37,7 @@ const styles = StyleSheet.create({
         marginTop: 100,
         marginHorizontal: 24,
         padding: 16,
-        backgroundColor: '#6D1A36',
+        backgroundColor: '#5D1A36',
         borderRadius: 8,
         elevation: 4,
         shadowColor: 'black',
@@ -27,6 +46,23 @@ const styles = StyleSheet.create({
             height: 2
         },
         shadowRadius: 6,
-        shadowOpacity: 0.2
+        shadowOpacity: 0.2,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    numberInput:{
+        height:50,
+        width: 50,
+        fontSize:32,
+        borderColor: '#ddb52f',
+        borderBottomWidth:2,
+        color: '#ddb52f',
+        marginVertical: 8,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingBottom:0
+    },
+    buttonsContainer:{
+        flexDirection:'row'
     }
 });
