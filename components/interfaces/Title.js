@@ -18,6 +18,6 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         borderWidth:2,
         borderColor: 'white',
-        padding:12
+        padding:10
     }
 });
