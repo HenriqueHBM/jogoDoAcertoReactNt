@@ -1,11 +1,12 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import Title from "../components/interfaces/Title";
 import { useEffect, useState } from "react";
 import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "../components/interfaces/PrimaryButton";
 import Card from "../components/interfaces/card";
 import InstructionText from "../components/interfaces/InstructionText";
-import {Ionicons} from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import GuessLogItem from "../components/game/GuessLogItem";
 
 
 // função/variaveis fora do escopo para nao ficar recriando os mesmos, melhorando a performance;
@@ -28,12 +29,19 @@ function GameScreen({ userNumber, onGameOver }) {
     const initialGuess = generateRandomBetween(1, 100, userNumber);
     // salvando o chute
     const [currentGuess, setCurrentGuess] = useState(initialGuess)
+    const [guessRounds, setGuessRounds] = useState([initialGuess]);
 
     useEffect(() => {
-        if (currentGuess === userNumber) {            
+        if (currentGuess === userNumber) {
             onGameOver();
         }
     }, [currentGuess, userNumber, onGameOver]);
+
+    // com o array vazio, ele entende que sera executado apenas quando for carregado pela primeira vez
+    useEffect(() => {
+        let minNum = 1;
+        let maxNum = 100;
+    }, []);
 
     function nextGuessHandler(direction) {
         if (
@@ -56,7 +64,11 @@ function GameScreen({ userNumber, onGameOver }) {
         }
         const newRnNumber = generateRandomBetween(minNum, maxNum, currentGuess);
         setCurrentGuess(newRnNumber);
+        setGuessRounds(previGuessRounds => [
+            newRnNumber, ...previGuessRounds
+        ]);
     }
+
     return (
         <View style={styles.screen}>
             <Title>Chute do Oponente</Title>
@@ -67,7 +79,7 @@ function GameScreen({ userNumber, onGameOver }) {
                     <View style={styles.buttonContainer}>
                         {/* nao faz sentido para mim, so aceitei usar o bind */}
                         <PrimaryButton onPress={nextGuessHandler.bind(this, 'maior')}>
-                        <Ionicons name="add-circle-outline" size={24} color="white" />
+                            <Ionicons name="add-circle-outline" size={24} color="white" />
                         </PrimaryButton>
                     </View>
                     <View style={styles.buttonContainer}>
@@ -77,6 +89,16 @@ function GameScreen({ userNumber, onGameOver }) {
                     </View>
                 </View>
             </Card>
+            <View style={styles.listContainer}>
+                {/* {guessRounds.map(guessRound => <Text key={guessRound}>{guessRound}</Text>)} */}
+                <FlatList data={guessRounds} renderItem={
+                    (itemData) =>
+                        <GuessLogItem roundNumber={itemData.index + 1} guess={itemData.item} />
+                }
+                    keyExtractor={(item) => item}
+                >
+                </FlatList>
+            </View>
         </View>
     );
 }
@@ -94,11 +116,15 @@ const styles = StyleSheet.create({
     buttonsContainer: {
         flexDirection: 'row'
     },
-    buttonContainer:{
-        flex:1,
-        height:50
+    buttonContainer: {
+        flex: 1,
+        height: 50
     },
-    InstructionText:{
-        marginBottom:12
-    }
+    InstructionText: {
+        marginBottom: 12
+    },
+    listContainer: {
+        flex: 1,
+    },
+
 })

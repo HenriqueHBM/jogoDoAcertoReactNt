@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     numberText:{
+        fontFamily: 'open-sans',
         color: Colors.amarelinho,
         fontSize:36,
         fontWeight:'bold'

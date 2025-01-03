@@ -12,7 +12,7 @@ export default Card;
 
 const styles = StyleSheet.create({
     card: {
-        marginTop: 36,
+        marginVertical: 36,
         marginHorizontal: 24,
         padding: 16,
         backgroundColor: '#5D1A36',

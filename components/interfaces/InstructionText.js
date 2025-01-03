@@ -11,7 +11,8 @@ export default InstructionText;
 
 const styles = StyleSheet.create({
     instructionText: {
+        fontFamily: 'lucy',
         color: Colors.amarelinho,
-        fontSize: 24
+        fontSize: 40
     }
 })

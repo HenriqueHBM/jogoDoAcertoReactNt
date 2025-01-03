@@ -6,13 +6,24 @@ import { useState } from 'react';
 import GameScreen from './screens/GameScreen';
 import Colors from './constants/Colors';
 import GameOverScreen from './screens/GameOverScreen';
+import {useFonts} from 'expo-font'
+import AppLoading from 'expo-app-loading';
 
 // SafeAreaView de onde foi pego; https://www.freecodecamp.org/news/how-to-use-safe-area-context-to-avoid-notches-in-react-native-apps/
 // o normal do react não funciona corretamente no android 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
+  const [guessRounds, setGuessRounds] = useState(0);
 
+  const [fontsLoad] = useFonts({
+    'open-sans': require('./assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf'),
+    'lucy': require('./assets/fonts/Lucy Said Ok Personal Use.ttf')
+  });
+
+  if(!fontsLoad){
+    return <AppLoading />;
+  }
   function pickedNumberHandler(pickedNumber){
     setUserNumber(pickedNumber);
     setGameIsOver(false);
@@ -22,6 +33,11 @@ export default function App() {
     setGameIsOver(true);
   }
 
+  function startNewGameHandler(){
+    setUserNumber(null);
+    setGuessRounds(0)
+  }
+
   let screen = <StartGameScreen onPickNumber={pickedNumberHandler}  />;
 
   if(userNumber){
@@ -29,7 +45,7 @@ export default function App() {
   }
 
   if(gameIsOver && userNumber){
-    screen = <GameOverScreen />
+    screen = <GameOverScreen roundsNumber={guessRounds} userNumber={userNumber} onStartNewGame={startNewGameHandler}/>
   }
 
   return (
